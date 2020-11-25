@@ -1,0 +1,23 @@
+[package]
+name = "fil-subprocess"
+version = "0.1.0"
+authors = ["yangdonglin <332407470@qq.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+filecoin-proofs = { features = ["gpu"], path = "../rust-fil-proofs/filecoin-proofs" }
+log = "*"
+backtrace = "*"
+env_logger = "*"
+
+
+
+[[bin]]
+name = "p2"
+path = "src/p2.rs"
+
+[[bin]]
+name = "c2"
+path = "src/c2.rs"
