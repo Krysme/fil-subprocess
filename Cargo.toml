@@ -15,9 +15,9 @@ env_logger = "*"
 
 
 [[bin]]
-name = "p2"
+name = "lotus-p2"
 path = "src/p2.rs"
 
 [[bin]]
-name = "c2"
+name = "lotus-c2"
 path = "src/c2.rs"
