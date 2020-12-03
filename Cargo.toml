@@ -11,12 +11,10 @@ filecoin-proofs = { features = ["gpu"], path = "../rust-fil-proofs/filecoin-proo
 log = "*"
 backtrace = "*"
 env_logger = "*"
+serde_json = "*"
+anyhow = "*"
+serde = { version = "1.0", features = ["rc", "derive"] }
 
-
-
-[[bin]]
-name = "lotus-p2"
-path = "src/p2.rs"
 
 [[bin]]
 name = "lotus-c2"
