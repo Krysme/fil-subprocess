@@ -44,10 +44,20 @@ fn main()
 {
     utils::set_log();
     info!("lotus-c2 started");
-    utils::set_panic_hook();
+    utils::set_panic_hook("c2");
 
-    if let Err(e) = run() {
-        info!("subprocess error:\n{:?}", e);
+    let r = std::panic::catch_unwind(|| run());
+
+    match r {
+        Ok(Ok(_)) => std::process::exit(0),
+        Ok(Err(e)) => {
+            info!("c2 subprocess error:\n{:?}", e);
+            std::process::exit(255)
+        }
+        Err(e) => {
+            info!("c2 panic: {:?}", e);
+            std::process::exit(254)
+        }
     }
 }
 

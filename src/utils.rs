@@ -8,11 +8,11 @@ pub fn set_log()
     env_logger::init();
 }
 
-pub fn set_panic_hook()
+pub fn set_panic_hook(name: &'static str)
 {
-    std::panic::set_hook(Box::new(|_| {
+    std::panic::set_hook(Box::new(move |_| {
         let bt = backtrace::Backtrace::new();
-        info!("panic occured, backtrace: {:?}", bt);
+        info!("{} panic occured, backtrace: {:?}", name, bt);
     }));
 }
 
