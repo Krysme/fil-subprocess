@@ -43,6 +43,7 @@ macro_rules! shape_dispatch {
 fn main()
 {
     utils::set_log();
+    info!("lotus-c2 started");
     utils::set_panic_hook();
 
     if let Err(e) = run() {
@@ -61,8 +62,10 @@ pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()>
     let param_folder = utils::param_folder().context("cannot get param folder")?;
     let uuid_path = Path::new(&param_folder).join(&uuid);
 
+    info!("ready to read parameter: {:?}", uuid_path);
     let infile =
         File::open(&uuid_path).with_context(|| format!("cannot open file {:?}", uuid_path))?;
+    info!("parameter file opened: {:?}", uuid_path);
 
     let data = serde_json::from_reader::<_, C2Param<Tree>>(infile)
         .context("failed to deserialize p2 params")?;
@@ -73,6 +76,7 @@ pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()>
         prover_id,
         sector_id,
     } = data;
+    info!("{:?}: parameter serialized: {:?}", sector_id, uuid_path);
 
     let out = custom::c2::whole(porep_config, phase1_output, prover_id, sector_id)?;
 
