@@ -19,3 +19,7 @@ serde = { version = "1.0", features = ["rc", "derive"] }
 [[bin]]
 name = "lotus-c2"
 path = "src/c2.rs"
+
+[[bin]]
+name = "lotus-p2"
+path = "src/p2.rs"
