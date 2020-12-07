@@ -22,23 +22,6 @@ struct C2Param<Tree: 'static + MerkleTreeTrait>
     sector_id: SectorId,
 }
 
-macro_rules! shape_dispatch {
-    ($sector_size: ident, $fun: ident, $uuid: ident) => {{
-        match $sector_size as u64 {
-            SECTOR_SIZE_2_KIB => $fun::<SectorShape2KiB>(&$uuid),
-            SECTOR_SIZE_4_KIB => $fun::<SectorShape4KiB>(&$uuid),
-            SECTOR_SIZE_16_KIB => $fun::<SectorShape16KiB>(&$uuid),
-            SECTOR_SIZE_32_KIB => $fun::<SectorShape32KiB>(&$uuid),
-            SECTOR_SIZE_8_MIB => $fun::<SectorShape8MiB>(&$uuid),
-            SECTOR_SIZE_16_MIB => $fun::<SectorShape16MiB>(&$uuid),
-            SECTOR_SIZE_512_MIB => $fun::<SectorShape512MiB>(&$uuid),
-            SECTOR_SIZE_1_GIB => $fun::<SectorShape1GiB>(&$uuid),
-            SECTOR_SIZE_32_GIB => $fun::<SectorShape32GiB>(&$uuid),
-            SECTOR_SIZE_64_GIB => $fun::<SectorShape64GiB>(&$uuid),
-            _ => ::anyhow::bail!("shape not recognized"),
-        }
-    }};
-}
 
 fn main()
 {
@@ -88,7 +71,7 @@ pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()>
     } = data;
     info!("{:?}: parameter serialized: {:?}", sector_id, uuid_path);
 
-    let out = custom::c2::whole(porep_config, phase1_output, prover_id, sector_id)?;
+    let out = seal_commit_phase2(porep_config, phase1_output, prover_id, sector_id)?;
 
     std::fs::write(uuid_path, &out.proof)
         .with_context(|| format!("{:?}: cannot write result to file", sector_id))?;
