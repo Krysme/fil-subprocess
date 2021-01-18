@@ -71,7 +71,7 @@ pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()>
     } = data;
     info!("{:?}: parameter serialized: {:?}", sector_id, uuid_path);
 
-    let out = seal_commit_phase2(porep_config, phase1_output, prover_id, sector_id)?;
+    let out = custom::c2::whole(porep_config, phase1_output, prover_id, sector_id)?;
 
     std::fs::write(uuid_path, &out.proof)
         .with_context(|| format!("{:?}: cannot write result to file", sector_id))?;
