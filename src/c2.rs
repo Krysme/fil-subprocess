@@ -22,7 +22,6 @@ struct C2Param<Tree: 'static + MerkleTreeTrait>
     sector_id: SectorId,
 }
 
-
 fn main()
 {
     utils::set_log();

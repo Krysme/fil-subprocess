@@ -15,7 +15,8 @@ use serde::Serialize;
 use utils::ParentParam;
 
 #[derive(Serialize, Deserialize)]
-struct P2Param<Tree: 'static + MerkleTreeTrait> {
+struct P2Param<Tree: 'static + MerkleTreeTrait>
+{
     porep_config: PoRepConfig,
     #[serde(bound(
         serialize = "SealPreCommitPhase1Output<Tree>: Serialize",
@@ -26,7 +27,8 @@ struct P2Param<Tree: 'static + MerkleTreeTrait> {
     replica_path: PathBuf,
 }
 
-fn main() {
+fn main()
+{
     utils::set_log();
     info!("p2 subprocess started");
     utils::set_panic_hook("p2");
@@ -45,12 +47,14 @@ fn main() {
     }
 }
 
-fn run() -> Result<()> {
+fn run() -> Result<()>
+{
     let ParentParam { uuid, sector_size } = utils::param_from_parent()?;
-	shape_dispatch!(sector_size, p2, uuid)
+    shape_dispatch!(sector_size, p2, uuid)
 }
 
-pub fn p2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
+pub fn p2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()>
+{
     let param_folder = utils::param_folder().context("cannot get param folder")?;
     let uuid_path = Path::new(&param_folder).join(&uuid);
 
@@ -72,9 +76,9 @@ pub fn p2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
 
     let out = seal_pre_commit_phase2(porep_config, phase1_output, cache_path, &replica_path)?;
 
-	let mut buf = [0u8; 64];
-	buf[..32].copy_from_slice(&out.comm_r);
-	buf[32..].copy_from_slice(&out.comm_d);
+    let mut buf = [0u8; 64];
+    buf[..32].copy_from_slice(&out.comm_r);
+    buf[32..].copy_from_slice(&out.comm_d);
 
     std::fs::write(uuid_path, &buf)
         .with_context(|| format!("{:?}: cannot write result to file", &replica_path))?;
