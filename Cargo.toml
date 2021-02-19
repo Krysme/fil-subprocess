@@ -17,6 +17,7 @@ serde = { version = "1.0", features = ["rc", "derive"] }
 
 [patch.crates-io]
 bellperson = { path = "../my-bellman" }
+neptune = { path = "../neptune" }
 
 [[bin]]
 name = "lotus-c2"
