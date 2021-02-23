@@ -4,7 +4,7 @@ use anyhow::{Context, Result};
 use log::info;
 pub fn set_log()
 {
-    env_logger::init();
+    fil_logger::init();
 }
 
 pub fn set_panic_hook(name: &'static str)
