@@ -33,7 +33,7 @@ fn main()
     match r {
         Ok(Ok(_)) => std::process::exit(0),
         Ok(Err(e)) => {
-            info!("c2 subprocess error:\n{:?}", e);
+            info!("c2 subprocess error: {:?}", e);
             std::process::exit(255)
         }
         Err(e) => {
