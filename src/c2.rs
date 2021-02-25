@@ -28,7 +28,7 @@ fn main()
     info!("lotus-c2 started");
     utils::set_panic_hook("c2");
 
-    let r = std::panic::catch_unwind(|| run());
+    let r = std::panic::catch_unwind(run);
 
     match r {
         Ok(Ok(_)) => std::process::exit(0),
