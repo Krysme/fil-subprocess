@@ -49,16 +49,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ahash"
-version = "0.5.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19fac972e53443ba111b1ff866e9d3b6484df5c05030e13bc7c6a1ebc802e983"
-dependencies = [
- "getrandom 0.2.2",
- "lazy_static",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "0.7.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -133,9 +123,8 @@ checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
 name = "bellperson"
-version = "0.12.2"
+version = "0.12.3"
 dependencies = [
- "ahash",
  "bit-vec",
  "blake2s_simd",
  "byteorder 1.4.2",
@@ -152,8 +141,32 @@ dependencies = [
  "rand 0.7.3",
  "rand_core 0.5.1",
  "rayon",
- "rust-gpu-tools",
- "serde",
+ "rust-gpu-tools 0.2.2",
+ "rustc-hash",
+ "thiserror",
+]
+
+[[package]]
+name = "bellperson"
+version = "0.12.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c53631e678154f40b6d1b986e6ab638172d1b6aa992e49498567f90f64b483a"
+dependencies = [
+ "bit-vec",
+ "blake2s_simd",
+ "byteorder 1.4.2",
+ "crossbeam-channel 0.5.0",
+ "fff",
+ "groupy",
+ "lazy_static",
+ "log",
+ "memmap",
+ "num_cpus",
+ "paired",
+ "rand 0.7.3",
+ "rand_core 0.5.1",
+ "rayon",
+ "rustc-hash",
  "thiserror",
 ]
 
@@ -172,9 +185,6 @@ name = "bit-vec"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "349f9b6a179ed607305526ca489b34ad0a41aed5f7980fa90eb03160b69598fb"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "bitflags"
@@ -854,8 +864,7 @@ name = "filecoin-proofs"
 version = "5.4.0"
 dependencies = [
  "anyhow",
- "backtrace",
- "bellperson",
+ "bellperson 0.12.3",
  "bincode",
  "bitintr",
  "bitvec",
@@ -889,7 +898,6 @@ dependencies = [
  "rayon",
  "regex",
  "reqwest",
- "scopeguard",
  "serde",
  "serde_json",
  "sha2 0.9.3",
@@ -898,7 +906,6 @@ dependencies = [
  "structopt",
  "tar",
  "typenum",
- "uuid",
 ]
 
 [[package]]
@@ -1602,16 +1609,19 @@ dependencies = [
 
 [[package]]
 name = "neptune"
-version = "2.2.0"
+version = "2.6.0"
 dependencies = [
- "bellperson",
+ "bellperson 0.12.3",
  "blake2s_simd",
  "byteorder 1.4.2",
+ "ff-cl-gen",
  "fff",
  "generic-array 0.14.4",
+ "itertools 0.8.2",
  "lazy_static",
  "log",
  "neptune-triton",
+ "rust-gpu-tools 0.3.0",
 ]
 
 [[package]]
@@ -1887,8 +1897,10 @@ checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
 [[package]]
 name = "phase21"
 version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2e4dd94fa82b154cb22a5d708d231592d1310da9402825d1e338aa5b6864d65"
 dependencies = [
- "bellperson",
+ "bellperson 0.12.5",
  "blake2b_simd",
  "byteorder 1.4.2",
  "crossbeam 0.8.0",
@@ -2305,10 +2317,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "rust-gpu-tools"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39a221f75523a16675b1b3b78aa70cc361c4fffde33255a3d4414419a5f1347d"
+dependencies = [
+ "dirs",
+ "fil-ocl",
+ "lazy_static",
+ "log",
+ "sha2 0.8.2",
+ "thiserror",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e3bad0ee36814ca07d7968269dd4b7ec89ec2da10c4bb613928d3077083c232"
+
+[[package]]
+name = "rustc-hash"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustc-serialize"
@@ -2528,7 +2560,7 @@ version = "5.4.0"
 dependencies = [
  "aes",
  "anyhow",
- "bellperson",
+ "bellperson 0.12.3",
  "blake2b_simd",
  "blake2s_simd",
  "block-modes",
@@ -2548,7 +2580,6 @@ dependencies = [
  "rand 0.7.3",
  "rand_chacha 0.2.2",
  "rayon",
- "scopeguard",
  "serde",
  "serde_json",
  "sha2 0.9.3",
@@ -2562,7 +2593,7 @@ name = "storage-proofs-porep"
 version = "5.4.0"
 dependencies = [
  "anyhow",
- "bellperson",
+ "bellperson 0.12.3",
  "bincode",
  "byte-slice-cast",
  "byteorder 1.4.2",
@@ -2596,7 +2627,7 @@ name = "storage-proofs-post"
 version = "5.4.0"
 dependencies = [
  "anyhow",
- "bellperson",
+ "bellperson 0.12.3",
  "blake2b_simd",
  "blake2s_simd",
  "byteorder 1.4.2",
@@ -2946,16 +2977,6 @@ dependencies = [
  "idna",
  "matches",
  "percent-encoding",
-]
-
-[[package]]
-name = "uuid"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
-dependencies = [
- "getrandom 0.2.2",
- "serde",
 ]
 
 [[package]]
