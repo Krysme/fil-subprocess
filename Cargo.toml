@@ -10,7 +10,7 @@ edition = "2018"
 filecoin-proofs = { features = ["gpu"], path = "../rust-fil-proofs/filecoin-proofs" }
 log = "*"
 backtrace = "*"
-fil_logger = "*"
+env_logger = "*"
 serde_json = "*"
 anyhow = "*"
 serde = { version = "1.0", features = ["rc", "derive"] }
