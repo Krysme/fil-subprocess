@@ -1,28 +1,46 @@
-use std::path::{Path, PathBuf};
+use std::{
+    path::{Path, PathBuf},
+    thread::spawn,
+};
 
 use anyhow::{Context, Result};
 use log::info;
-pub fn set_log()
-{
+pub fn set_log() {
     env_logger::init();
 }
 
-pub fn set_panic_hook(name: &'static str)
-{
+pub fn set_panic_hook(name: &'static str) {
     std::panic::set_hook(Box::new(move |_| {
         let bt = backtrace::Backtrace::new();
         info!("{} panic occured, backtrace: {:?}", name, bt);
     }));
 }
 
-pub struct ParentParam
-{
+pub fn unbind_cores() -> Result<()> {
+    let mut child = std::process::Command::new("hwloc-bind")
+        .arg("--pid")
+        .arg(std::process::id().to_string())
+        .arg("all")
+        .spawn()
+        .context("cannot unbind cores")?;
+
+    match child
+        .wait()
+        .context("cannot wait for hwloc-bind")?
+        .code()
+        .context("cannot get exit code for hwloc-bind")?
+    {
+        0 => Ok(()),
+        n => Err(anyhow::anyhow!("hwloc-bind exited with error number: {}", n)),
+    }
+}
+
+pub struct ParentParam {
     pub sector_size: usize,
     pub uuid: String,
 }
 
-pub fn param_from_parent() -> Result<ParentParam>
-{
+pub fn param_from_parent() -> Result<ParentParam> {
     let mut args = std::env::args().skip(1).take(2);
     let uuid = args.next().context("cannot get uuid")?;
     let sector_size = args
@@ -34,8 +52,7 @@ pub fn param_from_parent() -> Result<ParentParam>
     Ok(ParentParam { sector_size, uuid })
 }
 
-pub fn param_folder() -> Option<PathBuf>
-{
+pub fn param_folder() -> Option<PathBuf> {
     Some(Path::new(&std::env::var("WORKER_PATH").ok()?).join("param"))
 }
 

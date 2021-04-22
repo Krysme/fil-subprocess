@@ -25,9 +25,5 @@ path = "src/c2.rs"
 
 
 [[bin]]
-name = "lotus-p2"
-path = "src/p2.rs"
-
-[[bin]]
 name = "lotus-window-post"
 path = "src/post.rs"
