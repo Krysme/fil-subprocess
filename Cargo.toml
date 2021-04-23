@@ -12,7 +12,7 @@ log = "*"
 backtrace = "*"
 env_logger = "*"
 serde_json = "*"
-anyhow = "*"
+anyhow = { version = "*", features = ["backtrace"] }
 serde = { version = "1.0", features = ["rc", "derive"] }
 
 [patch.crates-io]

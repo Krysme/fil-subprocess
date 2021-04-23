@@ -10,8 +10,7 @@ use utils::ParentParam;
 mod utils;
 
 #[derive(Serialize, Deserialize)]
-struct C2Param<Tree: 'static + MerkleTreeTrait>
-{
+struct C2Param<Tree: 'static + MerkleTreeTrait> {
     porep_config: PoRepConfig,
     #[serde(bound(
         serialize = "SealCommitPhase1Output<Tree>: Serialize",
@@ -22,13 +21,13 @@ struct C2Param<Tree: 'static + MerkleTreeTrait>
     sector_id: SectorId,
 }
 
-fn main()
-{
-	if let Err(e) = utils::unbind_cores() {
-		info!("cannot unbind cores: {:?}", e);
-		std::process::exit(255);
-	}
-	info!("cores unbound for c2");
+fn main() {
+    if let Err(e) = utils::unbind_cores() {
+        info!("cannot unbind cores: {:?}", e);
+        std::process::exit(255);
+    }
+    info!("cores unbound for c2");
+
     utils::set_log();
     info!("lotus-c2 started");
     utils::set_panic_hook("c2");
@@ -39,6 +38,17 @@ fn main()
         Ok(Ok(_)) => std::process::exit(0),
         Ok(Err(e)) => {
             info!("c2 subprocess error: {:?}", e);
+            info!("c2 subprocess backtrace: {:?}", e.backtrace());
+
+            utils::param_from_parent()
+                .and_then(|x| Ok((utils::param_folder().context("cannot get param folder")?, x)))
+                .and_then(|(folder, param)| Ok(Path::new(&folder).join(&param.uuid)))
+                .and_then(|path| {
+                    std::fs::write(path, format!("error {:?}\nbacktrace: {}", e, e.backtrace()))
+                        .context("cannot serialize error to uuid file")
+                })
+                .unwrap_or_else(|e| info!("cannot report error: {:?}", e));
+
             std::process::exit(255)
         }
         Err(e) => {
@@ -48,14 +58,12 @@ fn main()
     }
 }
 
-fn run() -> Result<()>
-{
+fn run() -> Result<()> {
     let ParentParam { uuid, sector_size } = utils::param_from_parent()?;
     shape_dispatch!(sector_size, c2, uuid)
 }
 
-pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()>
-{
+pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
     let param_folder = utils::param_folder().context("cannot get param folder")?;
     let uuid_path = Path::new(&param_folder).join(&uuid);
 
