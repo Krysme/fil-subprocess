@@ -42,7 +42,7 @@ fn main() {
 
             utils::param_from_parent()
                 .and_then(|x| Ok((utils::param_folder().context("cannot get param folder")?, x)))
-                .and_then(|(folder, param)| Ok(Path::new(&folder).join(&param.uuid)))
+                .map(|(folder, param)| Path::new(&folder).join(&param.uuid))
                 .and_then(|path| {
                     std::fs::write(path, format!("error {:?}\nbacktrace: {}", e, e.backtrace()))
                         .context("cannot serialize error to uuid file")
