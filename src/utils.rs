@@ -1,7 +1,4 @@
-use std::{
-    path::{Path, PathBuf},
-    thread::spawn,
-};
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use log::info;
@@ -17,9 +14,12 @@ pub fn set_panic_hook(name: &'static str) {
 }
 
 pub fn unbind_cores() -> Result<()> {
+	let pid = std::process::id();
+
+	info!("pid -> {}", pid);
     let mut child = std::process::Command::new("hwloc-bind")
         .arg("--pid")
-        .arg(std::process::id().to_string())
+        .arg(pid.to_string())
         .arg("all")
         .spawn()
         .context("cannot unbind cores")?;
@@ -31,7 +31,10 @@ pub fn unbind_cores() -> Result<()> {
         .context("cannot get exit code for hwloc-bind")?
     {
         0 => Ok(()),
-        n => Err(anyhow::anyhow!("hwloc-bind exited with error number: {}", n)),
+        n => Err(anyhow::anyhow!(
+            "hwloc-bind exited with error number: {}",
+            n
+        )),
     }
 }
 

@@ -1598,7 +1598,7 @@ dependencies = [
 
 [[package]]
 name = "neptune"
-version = "2.6.0"
+version = "2.7.0"
 dependencies = [
  "bellperson 0.12.3",
  "blake2s_simd",
