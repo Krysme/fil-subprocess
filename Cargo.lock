@@ -126,7 +126,7 @@ checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
 name = "bellperson"
-version = "0.12.3"
+version = "0.13.0"
 dependencies = [
  "bit-vec",
  "blake2s_simd",
@@ -145,30 +145,6 @@ dependencies = [
  "rand_core 0.5.1",
  "rayon",
  "rust-gpu-tools 0.2.2",
- "rustc-hash",
- "thiserror",
-]
-
-[[package]]
-name = "bellperson"
-version = "0.12.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c53631e678154f40b6d1b986e6ab638172d1b6aa992e49498567f90f64b483a"
-dependencies = [
- "bit-vec",
- "blake2s_simd",
- "byteorder 1.4.3",
- "crossbeam-channel 0.5.1",
- "fff",
- "groupy",
- "lazy_static",
- "log",
- "memmap",
- "num_cpus",
- "paired",
- "rand 0.7.3",
- "rand_core 0.5.1",
- "rayon",
  "rustc-hash",
  "thiserror",
 ]
@@ -657,9 +633,9 @@ dependencies = [
 
 [[package]]
 name = "dirs-sys"
-version = "0.3.5"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e93d7f5705de3e49895a2b5e0b8855a1c27f080192ae9c32a6432d50741a57a"
+checksum = "03d86534ed367a67548dc68113a0f5db55432fdfbb6e6f9d77704397d95d5780"
 dependencies = [
  "libc",
  "redox_users",
@@ -816,19 +792,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fil-subprocess"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "backtrace",
- "env_logger",
- "filecoin-proofs",
- "log",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "fil_logger"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -844,7 +807,7 @@ name = "filecoin-proofs"
 version = "5.4.0"
 dependencies = [
  "anyhow",
- "bellperson 0.12.3",
+ "bellperson",
  "bincode",
  "bitintr",
  "bitvec",
@@ -896,7 +859,7 @@ checksum = "1d34cfa13a63ae058bfa601fe9e313bbdb3746427c1459185464ce0fcf62e1e8"
 dependencies = [
  "cfg-if 1.0.0",
  "libc",
- "redox_syscall 0.2.6",
+ "redox_syscall",
  "winapi 0.3.9",
 ]
 
@@ -1393,9 +1356,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.93"
+version = "0.2.94"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9385f66bf6105b241aa65a61cb923ef20efc665cb9f9bb50ac2f0c4b7f378d41"
+checksum = "18794a8ad5b29321f790b55d93dfba91e125cb1a9edbd4f8e3150acc771c1a5e"
 
 [[package]]
 name = "log"
@@ -1404,6 +1367,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51b9bbe6c47d51fc3e1a9b945965946b4c44142ab8792c50835a980d362c2710"
 dependencies = [
  "cfg-if 1.0.0",
+]
+
+[[package]]
+name = "lotus-c2"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "backtrace",
+ "env_logger",
+ "filecoin-proofs",
+ "log",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -1560,7 +1536,7 @@ dependencies = [
 name = "neptune"
 version = "2.7.0"
 dependencies = [
- "bellperson 0.12.3",
+ "bellperson",
  "blake2s_simd",
  "byteorder 1.4.3",
  "ff-cl-gen",
@@ -1855,10 +1831,9 @@ dependencies = [
 [[package]]
 name = "phase21"
 version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2e4dd94fa82b154cb22a5d708d231592d1310da9402825d1e338aa5b6864d65"
+source = "git+https://github.com/Krysme/phase2?branch=master#4297ad1a0820ee498fde4f84bf92ae54446a62c6"
 dependencies = [
- "bellperson 0.12.5",
+ "bellperson",
  "blake2b_simd",
  "byteorder 1.4.3",
  "crossbeam 0.8.0",
@@ -2163,12 +2138,6 @@ dependencies = [
 
 [[package]]
 name = "redox_syscall"
-version = "0.1.57"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41cc0f7e4d5d4544e8861606a285bb08d3e70712ccc7d2b84d7c0ccfaf4b05ce"
-
-[[package]]
-name = "redox_syscall"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8270314b5ccceb518e7e578952f0b72b88222d02e8f77f5ecf7abbb673539041"
@@ -2178,13 +2147,12 @@ dependencies = [
 
 [[package]]
 name = "redox_users"
-version = "0.3.5"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de0737333e7a9502c789a36d7c7fa6092a49895d4faa31ca5df163857ded2e9d"
+checksum = "528532f3d801c87aec9def2add9ca802fe569e44a544afe633765267840abe64"
 dependencies = [
- "getrandom 0.1.16",
- "redox_syscall 0.1.57",
- "rust-argon2",
+ "getrandom 0.2.2",
+ "redox_syscall",
 ]
 
 [[package]]
@@ -2246,18 +2214,6 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "winreg",
-]
-
-[[package]]
-name = "rust-argon2"
-version = "0.8.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b18820d944b33caa75a71378964ac46f58517c92b6ae5f762636247c09e78fb"
-dependencies = [
- "base64",
- "blake2b_simd",
- "constant_time_eq",
- "crossbeam-utils 0.8.3",
 ]
 
 [[package]]
@@ -2517,7 +2473,7 @@ version = "5.4.0"
 dependencies = [
  "aes",
  "anyhow",
- "bellperson 0.12.3",
+ "bellperson",
  "blake2b_simd",
  "blake2s_simd",
  "block-modes",
@@ -2550,7 +2506,7 @@ name = "storage-proofs-porep"
 version = "5.4.0"
 dependencies = [
  "anyhow",
- "bellperson 0.12.3",
+ "bellperson",
  "bincode",
  "byte-slice-cast",
  "byteorder 1.4.3",
@@ -2583,7 +2539,7 @@ name = "storage-proofs-post"
 version = "5.4.0"
 dependencies = [
  "anyhow",
- "bellperson 0.12.3",
+ "bellperson",
  "blake2b_simd",
  "blake2s_simd",
  "byteorder 1.4.3",
@@ -2691,7 +2647,7 @@ dependencies = [
  "cfg-if 1.0.0",
  "libc",
  "rand 0.8.3",
- "redox_syscall 0.2.6",
+ "redox_syscall",
  "remove_dir_all",
  "winapi 0.3.9",
 ]
