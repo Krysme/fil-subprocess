@@ -22,13 +22,13 @@ struct C2Param<Tree: 'static + MerkleTreeTrait> {
 }
 
 fn main() {
+    utils::set_log();
     if let Err(e) = utils::unbind_cores() {
         info!("cannot unbind cores: {:?}", e);
         std::process::exit(255);
     }
     info!("cores unbound for c2");
 
-    utils::set_log();
     info!("lotus-c2 started");
     utils::set_panic_hook("c2");
 
