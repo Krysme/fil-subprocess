@@ -1,4 +1,7 @@
-use std::{fs::File, path::Path};
+use std::{
+    fs::File,
+    path::{Path, PathBuf},
+};
 
 use anyhow::{Context, Result};
 use filecoin_proofs::{storage_proofs::sector::SectorId, *};
@@ -10,15 +13,14 @@ use utils::ParentParam;
 mod utils;
 
 #[derive(Serialize, Deserialize)]
-struct C2Param<Tree: 'static + MerkleTreeTrait> {
+struct P1Param {
     porep_config: PoRepConfig,
-    #[serde(bound(
-        serialize = "SealCommitPhase1Output<Tree>: Serialize",
-        deserialize = "SealCommitPhase1Output<Tree>: Deserialize<'de>"
-    ))]
-    phase1_output: SealCommitPhase1Output<Tree>,
+    cache_path: PathBuf,
+    in_path: PathBuf,
     prover_id: ProverId,
     sector_id: SectorId,
+    ticket: Ticket,
+    piece_infos: Vec<PieceInfo>,
 }
 
 fn main() {
@@ -30,7 +32,7 @@ fn main() {
 
     utils::set_log();
     info!("lotus-c2 started");
-    utils::set_panic_hook("c2");
+    utils::set_panic_hook("p1");
 
     let r = std::panic::catch_unwind(run);
 
@@ -60,10 +62,10 @@ fn main() {
 
 fn run() -> Result<()> {
     let ParentParam { uuid, sector_size } = utils::param_from_parent()?;
-    shape_dispatch!(sector_size, c2, uuid)
+    shape_dispatch!(sector_size, p1, uuid)
 }
 
-pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
+pub fn p1<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
     let param_folder = utils::param_folder().context("cannot get param folder")?;
     let uuid_path = Path::new(&param_folder).join(&uuid);
 
@@ -72,20 +74,32 @@ pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
         File::open(&uuid_path).with_context(|| format!("cannot open file {:?}", uuid_path))?;
     info!("parameter file opened: {:?}", uuid_path);
 
-    let data = serde_json::from_reader::<_, C2Param<Tree>>(infile)
-        .context("failed to deserialize p2 params")?;
+    let data =
+        serde_json::from_reader::<_, P1Param>(infile).context("failed to deserialize p2 params")?;
 
-    let C2Param {
+    let P1Param {
         porep_config,
-        phase1_output,
+        cache_path,
+        in_path,
         prover_id,
         sector_id,
+        ticket,
+        piece_infos,
     } = data;
     info!("{:?}: parameter serialized: {:?}", sector_id, uuid_path);
 
-    let out = custom::c2::whole(porep_config, phase1_output, prover_id, sector_id)?;
+    let out = seal_pre_commit_phase1_layer::<_, _, _, Tree>(
+        porep_config,
+        cache_path,
+        in_path,
+        PathBuf::default(),
+        prover_id,
+        sector_id,
+        ticket,
+        &piece_infos,
+    )?;
 
-    std::fs::write(uuid_path, &out.proof)
+    std::fs::write(uuid_path, serde_json::to_string(&out).unwrap())
         .with_context(|| format!("{:?}: cannot write result to file", sector_id))?;
     Ok(())
 }
