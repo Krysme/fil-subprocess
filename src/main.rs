@@ -6,7 +6,7 @@ use std::{
 use anyhow::{Context, Result};
 use filecoin_proofs::{storage_proofs::sector::SectorId, *};
 
-use log::info;
+use log::{error, info};
 use serde::{Deserialize, Serialize};
 use utils::ParentParam;
 
@@ -97,9 +97,29 @@ pub fn p1<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
         sector_id,
         ticket,
         &piece_infos,
-    )?;
+    );
 
-    std::fs::write(uuid_path, serde_json::to_string(&out).unwrap())
-        .with_context(|| format!("{:?}: cannot write result to file", sector_id))?;
-    Ok(())
+    match out {
+        Ok(out) => {
+            if let Err(e) = std::fs::write(uuid_path, serde_json::to_string(&out).unwrap()) {
+                error!(
+                    "cannot write p1 result to file for {:?}, error:{:?}",
+                    sector_id, e
+                );
+            }
+            Ok(())
+        }
+        Err(e) => {
+            if let Err(fs_err) = std::fs::write(
+                uuid_path,
+                format!("error: {:?}, \nbacktrace: {}", e, e.backtrace()),
+            ) {
+                error!(
+                    "cannot write error to file for {:?}, error:{:?}",
+                    sector_id, fs_err
+                );
+            }
+            Err(e)
+        }
+    }
 }
