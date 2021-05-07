@@ -841,6 +841,7 @@ dependencies = [
 [[package]]
 name = "filecoin-proofs"
 version = "5.4.0"
+source = "git+https://github.com/wellhealth/rust-fil-proofs?branch=p1#51b51406409329e65e1399912f5d5e3a375690cf"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -2476,6 +2477,7 @@ dependencies = [
 [[package]]
 name = "sha2raw"
 version = "2.0.0"
+source = "git+https://github.com/wellhealth/rust-fil-proofs?branch=p1#51b51406409329e65e1399912f5d5e3a375690cf"
 dependencies = [
  "block-buffer 0.9.0",
  "byteorder 1.4.3",
@@ -2524,6 +2526,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "storage-proofs"
 version = "5.4.0"
+source = "git+https://github.com/wellhealth/rust-fil-proofs?branch=p1#51b51406409329e65e1399912f5d5e3a375690cf"
 dependencies = [
  "storage-proofs-core",
  "storage-proofs-porep",
@@ -2533,6 +2536,7 @@ dependencies = [
 [[package]]
 name = "storage-proofs-core"
 version = "5.4.0"
+source = "git+https://github.com/wellhealth/rust-fil-proofs?branch=p1#51b51406409329e65e1399912f5d5e3a375690cf"
 dependencies = [
  "aes",
  "anyhow",
@@ -2568,6 +2572,7 @@ dependencies = [
 [[package]]
 name = "storage-proofs-porep"
 version = "5.4.0"
+source = "git+https://github.com/wellhealth/rust-fil-proofs?branch=p1#51b51406409329e65e1399912f5d5e3a375690cf"
 dependencies = [
  "anyhow",
  "bellperson 0.13.0",
@@ -2605,6 +2610,7 @@ dependencies = [
 [[package]]
 name = "storage-proofs-post"
 version = "5.4.0"
+source = "git+https://github.com/wellhealth/rust-fil-proofs?branch=p1#51b51406409329e65e1399912f5d5e3a375690cf"
 dependencies = [
  "anyhow",
  "bellperson 0.13.0",
