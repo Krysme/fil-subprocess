@@ -7,8 +7,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-#filecoin-proofs = { features = ["gpu"], git = "https://github.com/wellhealth/rust-fil-proofs", branch = "c2-v8" }
-filecoin-proofs = { features = ["gpu"], path = "../rust-fil-proofs/filecoin-proofs" }
+filecoin-proofs = { features = ["gpu"], git = "https://github.com/wellhealth/rust-fil-proofs", branch = "c2-v8" }
+#filecoin-proofs = { features = ["gpu"], path = "../rust-fil-proofs/filecoin-proofs" }
 
 storage-proofs-core = { path = "../rust-fil-proofs/storage-proofs-core", version = "^8.0.0", default-features = false}
 log = "*"
