@@ -1,7 +1,8 @@
 use std::{fs::File, path::Path};
 
 use anyhow::{Context, Result};
-use filecoin_proofs::{storage_proofs::sector::SectorId, *};
+use filecoin_proofs::{MerkleTreeTrait, PoRepConfig, ProverId, SealCommitPhase1Output, seal_commit_phase2};
+use storage_proofs_core::sector::SectorId;
 
 use log::info;
 use serde::{Deserialize, Serialize};
@@ -10,15 +11,15 @@ use utils::ParentParam;
 mod utils;
 
 #[derive(Serialize, Deserialize)]
-struct C2Param<Tree: 'static + MerkleTreeTrait> {
-    porep_config: PoRepConfig,
+pub struct C2Param<Tree: 'static + MerkleTreeTrait> {
+    pub porep_config: PoRepConfig,
     #[serde(bound(
         serialize = "SealCommitPhase1Output<Tree>: Serialize",
         deserialize = "SealCommitPhase1Output<Tree>: Deserialize<'de>"
     ))]
-    phase1_output: SealCommitPhase1Output<Tree>,
-    prover_id: ProverId,
-    sector_id: SectorId,
+    pub phase1_output: SealCommitPhase1Output<Tree>,
+    pub prover_id: ProverId,
+    pub sector_id: SectorId,
 }
 
 fn main() {
@@ -83,7 +84,8 @@ pub fn c2<Tree: 'static + MerkleTreeTrait>(uuid: &str) -> Result<()> {
     } = data;
     info!("{:?}: parameter serialized: {:?}", sector_id, uuid_path);
 
-    let out = custom::c2::whole(porep_config, phase1_output, prover_id, sector_id)?;
+    // let out = custom::c2::whole(porep_config, phase1_output, prover_id, sector_id)?;
+    let out = seal_commit_phase2(porep_config, phase1_output, prover_id, sector_id)?;
 
     std::fs::write(uuid_path, &out.proof)
         .with_context(|| format!("{:?}: cannot write result to file", sector_id))?;
