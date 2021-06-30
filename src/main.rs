@@ -28,10 +28,10 @@ fn main() {
         info!("cannot unbind cores: {:?}", e);
         std::process::exit(255);
     }
-    info!("cores unbound for c2");
+    info!("cores unbound for p1");
 
     utils::set_log();
-    info!("lotus-c2 started");
+    info!("lotus-p1 started");
     utils::set_panic_hook("p1");
 
     let r = std::panic::catch_unwind(run);
@@ -39,8 +39,8 @@ fn main() {
     match r {
         Ok(Ok(_)) => std::process::exit(0),
         Ok(Err(e)) => {
-            info!("c2 subprocess error: {:?}", e);
-            info!("c2 subprocess backtrace: {:?}", e.backtrace());
+            info!("p1 subprocess error: {:?}", e);
+            info!("p1 subprocess backtrace: {}", e.backtrace());
 
             utils::param_from_parent()
                 .and_then(|x| Ok((utils::param_folder().context("cannot get param folder")?, x)))
@@ -54,7 +54,7 @@ fn main() {
             std::process::exit(255)
         }
         Err(e) => {
-            info!("c2 panic: {:?}", e);
+            info!("p1 panic: {:?}", e);
             std::process::exit(254)
         }
     }
